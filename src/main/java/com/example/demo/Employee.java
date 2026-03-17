@@ -1,9 +1,10 @@
 package com.example.demo;
 
-public class Employee {
+public class Employee implements Emp{
 	
 	
-	String name;
+	private String name;
+	
 	public Employee(String name, int age) {
 		super();
 		this.name = name;

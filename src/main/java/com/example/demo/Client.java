@@ -3,8 +3,10 @@ package com.example.demo;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -14,15 +16,15 @@ public class Client {
 		// TODO Auto-generated method stub
 
 		
-		f1();
+		//f1();
 		
-	 f2();
+	// f2();
 
 
 		
 		
-		f4();
-		f5();
+	//	f4();
+		f6();
 		
 		
 	}
@@ -69,33 +71,23 @@ public class Client {
 	
 	
 
-	static void f5()
+		
+	
+	
+	
+	static void f6()
 	{
+		Addition addi = new Addition();
+		/*
+		 * int[] num = new int[] {1,2,3,4}; int target =6;
+		 * 
+		 * System.out.println( Arrays.toString(addi.twoSum(num, target)));
+		 */
+		int[] nums = {1,2,3,4};
+		int target =6;
 		
-		List<Employee> employees = new ArrayList<>();
-		employees.add(new Employee("sandeep" , 43));
-		employees.add(new Employee("Honey" , 42));
-		employees.add(new Employee("pradeep" , 47));
-		
-		
-		// highest/lowest
-		Optional<Employee> oldest = employees.stream().max(Comparator.comparing(emp -> emp.name));
-		
-		 //sort 
-		
-		employees.sort(Comparator.comparing(emp -> emp.name));
-		
-		//print
-		employees.stream().forEach( a ->   System.out.println( "Name " + a.name) );
-		   
-		   
-		   oldest.ifPresent(emp -> System.out.println(emp.name));
-		
+		System.out.println( Arrays.toString(addi.twoSum3(nums, target)));
 	}
-	
-	
-	
-	
 	
 	
 
