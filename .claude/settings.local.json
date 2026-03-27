@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -E \"\\\\.\\(txt|toml|py|yaml|yml|json|md|cfg|ini\\)$|requirements|setup|pyproject|README|Makefile\")",
+      "Bash(jar tf:*)",
+      "Bash(./mvnw clean:*)",
+      "Bash(curl -s -X POST http://localhost:8080/api/employees -H \"Content-Type: application/json\" -d '{\"\"firstName\"\":\"\"Jane\"\",\"\"lastName\"\":\"\"Doe\"\",\"\"email\"\":\"\"jane@example.com\"\",\"\"department\"\":\"\"Engineering\"\",\"\"salary\"\":95000}')",
+      "Bash(__NEW_LINE_7bb83b48d04baba2__ echo:*)",
+      "Bash(curl -s http://localhost:8080/api/employees)",
+      "Bash(curl -s http://localhost:8080/api/employees/1)",
+      "Bash(curl -s -X PUT http://localhost:8080/api/employees/1 -H \"Content-Type: application/json\" -d '{\"\"firstName\"\":\"\"Jane\"\",\"\"lastName\"\":\"\"Smith\"\",\"\"email\"\":\"\"jane@example.com\"\",\"\"department\"\":\"\"Engineering\"\",\"\"salary\"\":100000}')"
+    ]
+  }
+}

@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**NorthlakeBridgeVentures** is a Spring Boot 4.0.3 REST API backed by MySQL (AWS RDS). It uses Spring Data JPA for persistence and Spring Web MVC for HTTP endpoints. Java 17 is required.
+**NorthlakeBridgeVentures** is a Spring Boot 4.0.3 REST API backed by PostgreSQL. It uses Spring Data JPA for persistence and Spring Web MVC for HTTP endpoints. Java 17 is required.
 
 ## Build & Run Commands
 
@@ -28,20 +28,37 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Configuration
 
 - Main config: `src/main/resources/application.properties`
-- Secrets (gitignored): `application-secrets.properties` or `.env`
-- DB password is injected via environment variable: `DB_PASSWORD`
-- MySQL datasource points to AWS RDS; update the `spring.datasource.url` when targeting a different instance
-- `spring.jpa.hibernate.ddl-auto=update` — Hibernate auto-manages schema; change to `validate` or `none` in production
+- Active database: PostgreSQL (`localhost:5432/mydb`); dialect is `PostgreSQLDialect`
+- Both `postgresql` and `mysql-connector-j` drivers are on the classpath — only PostgreSQL is configured
+- H2 is on the classpath (`runtime`) and can be used for in-memory test profiles
+- `spring.jpa.hibernate.ddl-auto=update` — Hibernate manages schema automatically
+- `spring.jpa.show-sql=true` — SQL is logged to console
+- Note: `application.properties` is missing `#` prefixes on the HikariCP and JPA comment lines (lines 17, 23); treat those as comments
 
 ## Architecture
 
-- **Entry point**: `src/main/java/com/example/demo/NorthlakeBridgeVenturesApplication.java`
-- **Package root**: `com.example.demo` (generated default; new code should live here or a subpackage)
-- **Layers to build out**: Controller → Service → Repository (Spring Data JPA) → Entity (JPA `@Entity`)
-- **Database**: MySQL via `mysql-connector-j`; Hibernate dialect `MySQLDialect`
+- **Entry point**: `NorthlakeBridgeVenturesApplication.java`
+- **Package root**: `com.example.demo`
 
-## Key Conventions
+Current layers and packages:
 
-- Place JPA entities, repositories, services, and controllers in subpackages under `com.example.demo` (e.g., `com.example.demo.product`, `com.example.demo.user`)
-- Profile-specific properties use the `application-{profile}.properties` naming convention; `application-secret.properties` is gitignored for local secrets
-- The Maven wrapper (`mvnw`) is the standard way to build — no local Maven installation required
+| Package | Contents |
+|---|---|
+| `com.example.demo.hello` | `HelloControllerClient` (`/api/hello`) + `HelloService` |
+| `com.example.demo.entity` | `User` — JPA entity mapped to `users` table (`id`, `name`, `role`) |
+| `com.example.demo.repository` | `UserRepository` — `JpaRepository<User, Long>` |
+| `com.example.demo.sketch` | Scratch/experimental code; not production |
+
+There is no controller or service for `User` yet — only the entity and repository exist.
+
+New features should follow the Controller → Service → Repository → Entity layering, with each domain in its own subpackage (e.g., `com.example.demo.user`).
+
+## Code Style (from `.claude/rules/java/`)
+
+- Use **constructor injection**, never `@Autowired` field injection
+- Use **records** for DTOs and value types; mark entity fields `final` where possible
+- Return `Optional<T>` from repository finder methods; never call `.get()` without `.isPresent()`
+- Domain exceptions should extend `RuntimeException`
+- Keep stream pipelines to 3–4 operations; prefer loops for complex logic
+- Use `@DisplayName` and `methodName_scenario_expectedBehavior` naming for tests
+- Use **AssertJ** (`assertThat`) and **Mockito** for unit tests; **Testcontainers** for DB integration tests
