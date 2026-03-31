@@ -14,12 +14,21 @@ public class GlobalExceptionHandler {
 
     private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
-    record ErrorResponse(int status, String message) {}
+    record ErrorResponse(int status, String message) {
+    }
 
     @ExceptionHandler(EmployeeNotFoundException.class)
+
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleEmployeeNotFound(EmployeeNotFoundException ex) {
-        return new ErrorResponse(HttpStatus.NOT_FOUND.value(), ex.getMessage());
+        return new ErrorResponse(HttpStatus.NOT_FOUND.value(), ex.getMessage() + "Hello");
+    }
+
+    @ExceptionHandler(org.springframework.web.servlet.resource.NoResourceFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handleNoResourceFound(org.springframework.web.servlet.resource.NoResourceFoundException ex) {
+        // Return 404 without polluting the logs for missing resources like favicon.ico
+        return new ErrorResponse(HttpStatus.NOT_FOUND.value(), "Resource not found: " + ex.getResourcePath());
     }
 
     @ExceptionHandler(Exception.class)
